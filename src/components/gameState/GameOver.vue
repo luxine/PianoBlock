@@ -13,7 +13,7 @@
         <template #footer>
             <div class="footer">
                 <el-button type="primary" @click="cancel">回到首页</el-button>
-                <el-button type="primary" @click="reGame">重新游戏</el-button>
+                <el-button type="primary" @click="reGame">重新游戏 (Enter)</el-button>
             </div>
         </template>
     </el-card>

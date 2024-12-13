@@ -37,7 +37,7 @@ const _routerEvent = () => {
  */
 const _localEvent = () => {
   // 监听本地存储设置事件
-  eventEmitter.$on("local:set", (data:{[key: string]:any}) => {
+  eventEmitter.$on("local:set", (data: { [key: string]: any }) => {
     try {
       // 将数据序列化为JSON字符串并保存到本地存储
       Object.keys(data).forEach((key) => {
@@ -82,18 +82,43 @@ const _SliderEvent = () => {
 
   // 监听"slider:next"事件，当滑块触发下一个位置时调用
   eventEmitter.$on("slider:next", () => {
-      // 随机推送轨迹列表，更新游戏状态
-      gameStore.randomPushTrackList()
+    // 随机推送轨迹列表，更新游戏状态
+    gameStore.randomPushTrackList()
+  })
+
+  eventEmitter.$on("slider:dely", () => {
+    console.log("slider:dely");
+    // 重置游戏状态
+    gameStore.delyGame()
   })
 
   // 监听"slder:hide"事件，当滑块隐藏时调用
-  window.eventEmitter.$on('slder:hide', (el) => {
+  window.eventEmitter.$on('slder:hide', (el, isCheck = true) => {
+    if (!isCheck) {
+      console.log("关闭校验");
+      return
+    }
+
+    if (el.classList.contains('white-slider')) {
+      return
+    }
     // 如果滑块元素被隐藏，则不执行任何操作
     if (el.hidden) {
-        return
+      return
     }
+    console.log("游戏结束", el);
+
     // 发送"game:over"事件，通知游戏结束
     window.eventEmitter.$emit("game:over")
+  })
+
+  window.eventEmitter.$on('game:speedUP', () => {
+    const setting = gameStore.getGameSetting().value
+    if (setting.difficulty >= 1400) {
+      setting.difficulty = Number(setting.difficulty) - 20
+      gameStore.setGameSetting(setting)
+    }
+    console.log("game:speedUP:", gameStore.getGameSetting().value.difficulty);
   })
 }
 
@@ -102,7 +127,7 @@ const _SliderEvent = () => {
  */
 export const initEvent = () => {
   _routerEvent(),
-  _localEvent(),
-  _axiosEvent(),
-  _SliderEvent()
+    _localEvent(),
+    _axiosEvent(),
+    _SliderEvent()
 }

@@ -6,19 +6,25 @@
 
         <template #default>
 
-            <ElForm :model="from" label-width="auto" label-position="right" style="max-width: 400px;min-width: 300px;">
+            <ElForm :model="from" :inline="true" label-width="auto" label-position="right"
+                style="max-width: 400px;min-width: 300px;">
                 <el-form-item label="游戏难度">
                     <el-radio-group v-model="from.difficulty">
-                        <el-radio value="4000" >人机</el-radio>
-                        <el-radio value="3000" >一般</el-radio>
-                        <el-radio value="2500" >困难</el-radio>
-                        <el-radio value="1800" >地狱</el-radio>
+                        <el-radio :value="4000">人机</el-radio>
+                        <el-radio :value="3000">一般</el-radio>
+                        <el-radio :value="2500">困难</el-radio>
+                        <el-radio :value="1800">地狱</el-radio>
                     </el-radio-group>
                 </el-form-item>
 
                 <el-form-item label="轨道颜色">
-                    <el-radio-group v-model="from.color">
-                        <el-color-picker v-model="from.color" show-alpha/>
+                    <el-radio-group v-model="from.trackColor">
+                        <el-color-picker v-model="from.trackColor" show-alpha />
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="钢琴块颜色">
+                    <el-radio-group v-model="from.sliderColor">
+                        <el-color-picker v-model="from.sliderColor" show-alpha />
                     </el-radio-group>
                 </el-form-item>
             </ElForm>
@@ -68,6 +74,15 @@ onMounted(() => {
     // 获取游戏设置并深拷贝给表单数据
     const defineSetting = gameStore.getGameSetting()
     from.value = _.cloneDeep(defineSetting.value)
+    if (from.value.difficulty <= 4000 && from.value.difficulty >= 3000) {
+        from.value.difficulty = 4000
+    } else if (from.value.difficulty <= 3000 && from.value.difficulty > 2500) {
+        from.value.difficulty = 3000
+    } else if (from.value.difficulty <= 2500 && from.value.difficulty > 1800) {
+        from.value.difficulty = 2500
+    } else {
+        from.value.difficulty = 1800
+    }
 })
 </script>
 

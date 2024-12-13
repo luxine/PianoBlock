@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "animejs": "^3.2.2",
     "element-plus": "^2.9.0",
     "expansion-type.js": "^1.0.3",

@@ -18,7 +18,7 @@ export const startAnime = (ref: HTMLElement | null) => {
     // 使用animejs库创建动画效果
     anime({
         targets: ref, // 指定动画作用的目标元素
-        translateY: '125vh', // 设置元素在垂直方向上移动的距离，这里是120个视口高度
+        translateY: '130vh', // 设置元素在垂直方向上移动的距离，这里是120个视口高度
         duration: Number(gameStore.getGameSetting().value.difficulty) ?Number(gameStore.getGameSetting().value.difficulty): 3000, // 设置动画持续时间，单位为毫秒
         easing: 'linear', // 设置动画的速度曲线类型为线性，即匀速运动
         complete: function () {
