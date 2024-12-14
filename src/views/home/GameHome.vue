@@ -72,16 +72,27 @@ import 'element-plus/theme-chalk/display.css'
 import GameOver from "@/components/gameState/GameOver.vue";
 import Setting from "@/components/gameState/Setting.vue";
 // 初始化游戏仓库
+// 创建游戏仓库实例
 const gameStore = useGameStore();
 
 // 获取轨迹列表和滑块引用列表
 let tarckList = gameStore.getTrackList();
 let sliderRefsList = gameStore.getSliderRefs();
+
+// 控制游戏显示状态的响应式变量
 let gameShow = ref(true);
+// 控制游戏结束显示状态的响应式变量
 let gameOverShow = ref(false);
-let settingShow = ref(false)
-let intger = ref(0)
-let settingHover = ref(false)
+// 控制设置界面显示状态的响应式变量
+let settingShow = ref(false);
+
+// 用于记录游戏得分的响应式变量
+let intger = ref(0);
+
+// 用于指示设置按钮悬停状态的响应式变量
+let settingHover = ref(false);
+
+
 // 监视滑块引用列表的变化
 watch(() => sliderRefsList, (newValue, oldValue) => {
     // 获取新的滑块ID
@@ -99,40 +110,41 @@ watch(() => sliderRefsList, (newValue, oldValue) => {
 const handleSliderClick = (trackIndex: number, index: number) => {
     // 获取当前游戏状态中可消除的滑块数据
     const eliminableSlider = gameStore.getEliminableSlider()?.value;
+    // 判断当前点击的滑块是否可点击
     const isClick = gameStore.getTrackList()[trackIndex].value[index].isClick
-    // 检查点击的滑块是否为当前可消除的滑块
-    // console.log("当前方块在总数组中的索引",gameStore.getTrackListMap().findIndex((item: any) => item.SliderUID === tarckList[trackIndex].value[index].SliderUID));
-    // console.log("当前总数组末位索引",gameStore.getTrackListMap().length - 1);
-    // console.log("当前链表是否为空", gameStore.getEliminableSliderLinkedList().size() === 1);
-    // console.log("链表长度",gameStore.getEliminableSliderLinkedList().print());
-    
-    // console.log("当前滑块是否可消除", isClick);
-    
+    // 当可消除的滑块列表中只有一个滑块，且该滑块已被点击，并且是最后一个滑块时，执行消除操作
     if (gameStore.getEliminableSliderLinkedList().size() === 1 && isClick &&
         (gameStore.getTrackListMap().findIndex((item: any) => item.SliderUID === tarckList[trackIndex].value[index].SliderUID))
         === gameStore.getTrackListMap().length - 1
     ) {
+        // 移除可消除的滑块
         gameStore.removeEliminableSlider();
+        // 增加整数计数
         gameStore.addIntger()
+        // 更新整数显示值
         intger.value = gameStore.getIntger()
+        // 隐藏滑块
         sliderRefsList[trackIndex].value[index].hidden = true;
+        // 触发滑块延迟事件
         window.eventEmitter.$emit("slider:dely")
         return
     }
 
+    // 当点击的滑块与可消除的滑块匹配时，执行消除操作
     if (trackIndex === eliminableSlider.trackindex &&
         eliminableSlider.trackData[index].SliderUID === eliminableSlider.sliderID
         && isClick) {
         // 设置对应滑块的 hidden 属性为 true,并移除该滑块
         gameStore.removeEliminableSlider();
         sliderRefsList[trackIndex].value[index].hidden = true;
+        // 增加整数计数
         gameStore.addIntger()
+        // 更新整数显示值
         intger.value = gameStore.getIntger()
         return
     }
 
-
-
+    // 处理游戏结束的情况
     if (!isClick) {
         window.eventEmitter.$emit("game:over")
     }
@@ -238,7 +250,7 @@ onMounted(() => {
         gameOverShow.value = true;
         gameStore.gameOver();
     })
-
+    // 注册键盘事件
     window.addEventListener('keydown', handleKey);
 });
 

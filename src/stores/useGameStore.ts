@@ -92,11 +92,14 @@ export const useGameStore = defineStore('gameStore', () => {
     root.style.setProperty(variableName, value);
   }
 
-
+  // 获取轨道所有滑块信息的方法
   const getTrackListMap = () => {
     return trackListMap
   }
 
+  /**
+   * 清空轨道所有滑块信息的方法
+   */
   const clearTrackListMap = () => {
     trackListMap = []
   }
@@ -202,16 +205,7 @@ export const useGameStore = defineStore('gameStore', () => {
    */
   const delyGame = () => {
     window.eventEmitter.$emit("slder:hide",undefined,false)
-    // 遍历轨道列表，处理每个轨道项
-    gameOver()
-    // console.log("轨道数据", getTrackList());
-    // console.log("引用数据", getSliderRefs());
-    
-    // 调用随机推送轨道列表的函数，以更新轨道列表
-    randomPushTrackList()
-    console.log("轨道数据", getTrackList());
-    console.log("引用数据", getSliderRefs());
-    
+    // 暂时未实现相关功能
   }
   /**
    * 随机向一个轨道列表中添加滑块的方法
@@ -358,18 +352,31 @@ export const useGameStore = defineStore('gameStore', () => {
     getEliminableSlider,
     // 移除可消除的滑块
     removeEliminableSlider,
+    // 游戏结束
     gameOver,
+    // 添加积分
     addIntger,
+    // 获取积分
     getIntger,
+    // 获取最高分
     getMaxIntger,
+    // 设置最高分
     setMaxIntger,
+    // 重新开始游戏
     reGame,
+    // 获取游戏设置
     getGameSetting,
+    // 设置游戏设置
     setGameSetting,
+    // 设置全局CSS变量
     setGlobalCssVar,
+    // 获取可移除滑块链表
     getEliminableSliderLinkedList,
+    // 获取是否开始游戏状态
     getIsStart,
+    // 获取所有滑块组件的信息
     getTrackListMap,
+    // 延迟游戏(未实现)
     delyGame
   }
 })

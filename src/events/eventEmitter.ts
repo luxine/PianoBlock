@@ -1,36 +1,6 @@
 // 导入事件发射器和路由模块
 import { eventEmitter } from ".";
-import router from "@/router";
 import { useGameStore } from "@/stores/useGameStore";
-/**
- * 初始化axios相关事件的函数
- */
-const _axiosEvent = () => {
-}
-
-/**
- * 初始化路由相关事件的函数
- */
-const _routerEvent = () => {
-  // 监听路由回退事件
-  eventEmitter.$on("router:back", () => {
-    router.back();
-  });
-
-  // 监听路由推送事件
-  eventEmitter.$on("router:push", (name) => {
-    router.push({
-      name: name
-    });
-  });
-
-  // 监听路由替换事件
-  eventEmitter.$on("router:replace", (name) => {
-    router.replace({
-      name: name
-    });
-  });
-}
 
 /**
  * 初始化本地存储相关事件的函数
@@ -86,19 +56,19 @@ const _SliderEvent = () => {
     gameStore.randomPushTrackList()
   })
 
+ // 触发延迟事件,但是目前没有实现相应功能
   eventEmitter.$on("slider:dely", () => {
-    console.log("slider:dely");
-    // 重置游戏状态
     gameStore.delyGame()
   })
 
   // 监听"slder:hide"事件，当滑块隐藏时调用
+  // isCheck参数用于控制是否开启滑块校验，默认为true
+  // el 参数表示滑块元素
   window.eventEmitter.$on('slder:hide', (el, isCheck = true) => {
     if (!isCheck) {
-      console.log("关闭校验");
       return
     }
-
+    // 如果滑块元素是白色滑块，则不执行任何操作
     if (el.classList.contains('white-slider')) {
       return
     }
@@ -106,19 +76,17 @@ const _SliderEvent = () => {
     if (el.hidden) {
       return
     }
-    console.log("游戏结束", el);
-
     // 发送"game:over"事件，通知游戏结束
     window.eventEmitter.$emit("game:over")
   })
 
+  // 监听"game:speedUP"事件，当游戏速度增加时调用
   window.eventEmitter.$on('game:speedUP', () => {
     const setting = gameStore.getGameSetting().value
     if (setting.difficulty >= 1400) {
       setting.difficulty = Number(setting.difficulty) - 20
       gameStore.setGameSetting(setting)
     }
-    console.log("game:speedUP:", gameStore.getGameSetting().value.difficulty);
   })
 }
 
@@ -126,8 +94,6 @@ const _SliderEvent = () => {
  * 初始化函数，用于设置事件监听器
  */
 export const initEvent = () => {
-  _routerEvent(),
     _localEvent(),
-    _axiosEvent(),
     _SliderEvent()
 }
