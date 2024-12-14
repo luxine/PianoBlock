@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 // 导入 Vue 的钩子和游戏仓库
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, type Ref } from "vue";
 import { useGameStore } from "@/stores/useGameStore";
 import { startAnime } from "@/sliderClass/anime";
 import 'element-plus/theme-chalk/display.css'
@@ -204,20 +204,31 @@ const handleKey = (e: KeyboardEvent) => {
         window.eventEmitter.$emit("game:over")
     }
 }
+
+/**
+ * 设置两个 Ref 类型变量的值
+ * 此函数用于将第一个参数设置为 true，第二个参数设置为 false
+ * 主要用于在响应式数据中快速更新两个布尔值
+ * 
+ * @param values1 一个 Ref 类型的变量，其值将被设置为 true
+ * @param values2 另一个 Ref 类型的变量，其值将被设置为 false
+ */
+const setRefBooleanTF = (values1: Ref, values2: Ref) => {
+    values1.value = true
+    values2.value = false
+}
 // 取消设置并返回游戏界面
 const cancelSetting = () => {
-    settingShow.value = false
-    gameShow.value = true
+    setRefBooleanTF(gameShow, settingShow)
 }
+
 // 取消游戏结束状态并返回游戏界面
 const gameOverCancel = () => {
-    gameOverShow.value = false
-    gameShow.value = true
+    setRefBooleanTF(gameShow, gameOverShow)
 }
 // 确认设置并重新开始游戏
 const confirmSetting = () => {
-    settingShow.value = false
-    gameShow.value = true
+    setRefBooleanTF(gameShow, settingShow)
 }
 /**
  * 开始游戏
@@ -232,8 +243,7 @@ const startGame = () => {
 
 // 进入游戏设置界面
 const settingGame = () => {
-    settingShow.value = true
-    gameShow.value = false
+    setRefBooleanTF(settingShow, gameShow)
 }
 
 // 重新开始游戏
@@ -250,6 +260,9 @@ onMounted(() => {
         gameOverShow.value = true;
         gameStore.gameOver();
     })
+    // 获取所有已经注册的事件
+    window.eventEmitter.$getAllEvents()
+    
     // 注册键盘事件
     window.addEventListener('keydown', handleKey);
 });

@@ -204,7 +204,7 @@ export const useGameStore = defineStore('gameStore', () => {
    * 该函数的主要目的是根据一定的条件修改游戏的轨道列表和滑块引用
    */
   const delyGame = () => {
-    window.eventEmitter.$emit("slder:hide",undefined,false)
+    window.eventEmitter.$emit("slider:hide",undefined,false)
     // 暂时未实现相关功能
   }
   /**

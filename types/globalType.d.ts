@@ -28,6 +28,12 @@ declare class EventEmitter {
     $once(eventName: string, callback: Callback, ...args: any[]): this;
 
     /**
+     * 获取所有事件
+     * 
+     * @returns 所有事件的对象
+     */
+    $getAllEvents(): object;
+    /**
      * 注册一个事件监听器
      * @param eventName 事件名称
      * @param callback 回调函数

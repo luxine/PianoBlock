@@ -61,10 +61,10 @@ const _SliderEvent = () => {
     gameStore.delyGame()
   })
 
-  // 监听"slder:hide"事件，当滑块隐藏时调用
+  // 监听"slider:hide"事件，当滑块隐藏时调用
   // isCheck参数用于控制是否开启滑块校验，默认为true
   // el 参数表示滑块元素
-  window.eventEmitter.$on('slder:hide', (el, isCheck = true) => {
+  window.eventEmitter.$on('slider:hide', (el, isCheck = true) => {
     if (!isCheck) {
       return
     }

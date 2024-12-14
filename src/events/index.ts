@@ -1,3 +1,5 @@
+import _ from "lodash"
+
 /**
  * 定义一个回调函数类型，可以接受任意数量的参数并返回任意类型的值
  */
@@ -27,6 +29,21 @@ class EventEmitter {
      */
     $getEvent(eventName: string){
         return this._events[eventName]
+    }
+
+    /**
+     * 获取所有事件名称和对应的回调函数数组,以对象形式返回
+     * @returns 事件名称数组
+     */
+    $getAllEvents(massage: boolean = true){
+        const _eveObj = _.cloneDeep(this._events)
+        const _eveArr = Object.keys(_eveObj)
+        if(!massage){
+            return _eveArr
+        }
+        
+        console.log(`%c------------------------ \n EventEmitter事件中心通知:当前共计注册${_eveArr.length}个事件,调用-->  %ceventEmitter.$getEvent(eventName: string)%c方法可获取对应的回调函数数组,本方法传递参数false可关闭提示消息 \n------------------------------------------------------------------ \n`, 'color: blue;', 'color: red;', 'color: blue;', _eveArr);
+        return _eveArr
     }
 
     /**

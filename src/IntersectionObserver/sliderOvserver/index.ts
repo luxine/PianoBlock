@@ -23,7 +23,7 @@ export const sliderObserver = new IntersectionObserver((entries) => {
         }
         // 当元素完全不可见时，可选地执行一些操作
         if (entry.intersectionRatio <= 0) {
-            window.eventEmitter.$emit("slder:hide", entry.target);
+            window.eventEmitter.$emit("slider:hide", entry.target);
             sliderObserver.unobserve(entry.target);
         }
     });
